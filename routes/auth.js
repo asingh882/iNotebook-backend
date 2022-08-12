@@ -17,6 +17,7 @@ router.post('/createuser', [
 
 //if there are errors return bad request and the errors    
     const errors = validationResult(req);
+    let success = false;
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -44,7 +45,6 @@ router.post('/createuser', [
             name: req.body.name,
             email: req.body.email,
             password: secPass,
-            dob: req.body.dob,
         })
 
         const data = {
@@ -52,8 +52,9 @@ router.post('/createuser', [
                 id: user._id,
             }
         }
+        success = true;
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({authToken});
+        res.json({authToken ,success});
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal Server error");
@@ -66,7 +67,7 @@ router.post('/login', [
     body('username', 'Username cannot be blank').exists(),
     body('password', 'Password cannot be blank').exists(),
 ], async (req, res) => {
-
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -90,8 +91,8 @@ router.post('/login', [
             }
         }
         const authToken = jwt.sign(payload, JWT_SECRET);
-
-        res.send({authToken});
+        success = true;
+        res.send({authToken, success});
 
     } catch (error) {
         console.log(error.message);

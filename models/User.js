@@ -20,10 +20,6 @@ const UserSchema = new Schema ({
         type: String,
         required: true,
     },
-    dob: {
-        type: Date,
-        requied: true,
-    },
     date: {
         type: Date,
         default: Date.now,
